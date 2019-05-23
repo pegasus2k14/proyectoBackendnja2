@@ -72,6 +72,14 @@
 			</table>
 		</div>
 		
+		<!-- Div para mensaje de confirmacion de guardado de nuevo contacto -->
+		<div th:if="${result == 1}" class="alert alert-success" role="alert">
+		   Add Contact Successfully!
+		</div>
+		<div th:if="${result == 0}" class="alert alert-danger" role="alert">
+		   Add Contact Failed!
+		</div>
+		
 		<a href="#" th:href="@{/contacts/contactform}">
 		<button class="btn btn-lg btn-primary btn-block" type="submit"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Add contact</button>
 		</a>
