@@ -40,7 +40,9 @@ public class LoginController {
 		//realizamos la comprobacion de creadenciales
 		if(userCredential.getUsername().equals("user") && userCredential.getPassword().equals("user")) {
 			LOGGER.info("Returning to Contacts View");
-			return "contacts";    //retorna la vista 'contacts.html'
+			//Direccionamos al metodo 'showContacts()' de la Clase controladora 'ContactController'
+			//Para que este obtenga la lista de Contactos y direccione a la vista 'contacts.html'
+			return "redirect:/contacts/showContacts";    
 		}
 		LOGGER.info("Redirect to Login?error");
 		return "redirect:/login?error"; //nos direcciona al metodo anterior y pasa un parametro

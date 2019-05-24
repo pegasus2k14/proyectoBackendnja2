@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.miguel.nja.proyectoBackendnja2.constants.ViewConstants;
 import com.miguel.nja.proyectoBackendnja2.model.ContactModel;
@@ -25,15 +27,23 @@ public class ContactController {
 	private ContactService contactService;
 	
 	@GetMapping("/contactform")
-	public String redirectToContactForm(Model model) {
+	public String redirectToContactForm(Model model, @RequestParam(name="id",required=false) int id) {
+		if(id != 0) { //se va a modificar
+			//recuperamos la instancia de contact
+			ContactModel contactModel = contactService.findContactModelById(id);
+			model.addAttribute("contactModel", contactModel);
+			
+		}else { //si es un nuevo contacto 
 		//Agregamos al model una instancia de ContactModel, para que se pase tambien  a la vista
-		model.addAttribute("contactModel", new ContactModel());
+			model.addAttribute("contactModel", new ContactModel());
+		}
+		
 		return ViewConstants.CONTACT_FORM;  //retornamos la vista 'contactform'
 	}
 	
 	@GetMapping("/cancel")
 	public String cancelAddContact() {
-		return ViewConstants.CONTACTS; 
+		return "redirect:/contacts/showContacts"; 
 	}
 	
 	//Metodo para agregar nuevos contactos
@@ -48,7 +58,24 @@ public class ContactController {
 		}
 		
 		
-		return ViewConstants.CONTACTS; //retorna la vista de Contactos
+		return "redirect:/contacts/showContacts"; //retorna la vista de Contactos
+	}
+	
+	//Metodo para obtener un listado de contactos
+	@GetMapping("/showContacts")
+	public ModelAndView showContacts() {
+		ModelAndView mav = new ModelAndView(ViewConstants.CONTACTS);
+		//obtenemos el listado de ContactModel
+		mav.addObject("listContacts", contactService.listAllContacts());
+		
+		//retornamos el ModelAndView
+		return mav;
+	}
+	
+	@GetMapping("/removeContact")
+	public ModelAndView removeContact(@RequestParam(name="id",required=true) int id) {
+		contactService.removeContact(id);
+		return showContacts();  //metodo que a su vez retorna un ModelAndView
 	}
 
 	

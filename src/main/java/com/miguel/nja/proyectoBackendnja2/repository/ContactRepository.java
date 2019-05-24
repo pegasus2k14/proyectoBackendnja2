@@ -10,4 +10,5 @@ import com.miguel.nja.proyectoBackendnja2.entity.Contact;
 @Repository("contactRepository")
 public interface ContactRepository extends JpaRepository<Contact,Serializable>{
   
+	public Contact findById(int id);
 }
