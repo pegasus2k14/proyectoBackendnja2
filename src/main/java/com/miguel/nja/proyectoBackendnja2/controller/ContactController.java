@@ -16,6 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.miguel.nja.proyectoBackendnja2.constants.ViewConstants;
 import com.miguel.nja.proyectoBackendnja2.model.ContactModel;
 import com.miguel.nja.proyectoBackendnja2.services.ContactService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 @Controller
 @RequestMapping("/contacts")
@@ -26,7 +29,8 @@ public class ContactController {
 	@Qualifier("contactServiceImpl")
 	private ContactService contactService;
 	
-	@GetMapping("/contactform")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+        @GetMapping("/contactform")
 	public String redirectToContactForm(Model model, @RequestParam(name="id",required=false) int id) {
 		if(id != 0) { //se va a modificar
 			//recuperamos la instancia de contact
@@ -63,11 +67,16 @@ public class ContactController {
 	
 	//Metodo para obtener un listado de contactos
 	@GetMapping("/showContacts")
-	public ModelAndView showContacts() {
+	public ModelAndView showContacts() {            
 		ModelAndView mav = new ModelAndView(ViewConstants.CONTACTS);
 		//obtenemos el listado de ContactModel
 		mav.addObject("listContacts", contactService.listAllContacts());
-		
+                
+                //Recuperamos el usuario que se encuentra actualmente autenticado
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                //Agregamos el nombre del usuario al ModelAndView
+		mav.addObject("username", user.getUsername());
+                
 		//retornamos el ModelAndView
 		return mav;
 	}
