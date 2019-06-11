@@ -13,18 +13,28 @@ import com.miguel.nja.proyectoBackendnja2.model.ContactModel;
 import com.miguel.nja.proyectoBackendnja2.repository.ContactRepository;
 import com.miguel.nja.proyectoBackendnja2.services.ContactService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ContactServiceImpl.
+ */
 @Service("contactServiceImpl")
 public class ContactServiceImpl implements ContactService{
+	
+	/** The contact repository. */
 	//inyectamos el Repositorio
 	@Autowired
 	@Qualifier("contactRepository")
 	private ContactRepository contactRepository;
 	
+	/** The contact converter. */
 	//inyectamos la Clase convertidora
 	@Autowired
 	@Qualifier("contactConverter")
 	private ContactConverter contactConverter;
 
+	/* (non-Javadoc)
+	 * @see com.miguel.nja.proyectoBackendnja2.services.ContactService#saveContact(com.miguel.nja.proyectoBackendnja2.model.ContactModel)
+	 */
 	@Override
 	public ContactModel saveContact(ContactModel contactModel) {
 		Contact contact = contactRepository.save(contactConverter.contactModelToContact(contactModel));
@@ -33,6 +43,9 @@ public class ContactServiceImpl implements ContactService{
 		return contactConverter.contactToContactModel(contact);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.miguel.nja.proyectoBackendnja2.services.ContactService#listAllContacts()
+	 */
 	@Override
 	public List<ContactModel> listAllContacts() {
 		// obteniendo la lista de contactos
@@ -49,12 +62,18 @@ public class ContactServiceImpl implements ContactService{
 		return listContactModel;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.miguel.nja.proyectoBackendnja2.services.ContactService#findContactById(int)
+	 */
 	@Override
 	public Contact findContactById(int id) {
 		// TODO Auto-generated method stub
 		return contactRepository.findById(id);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.miguel.nja.proyectoBackendnja2.services.ContactService#removeContact(int)
+	 */
 	@Override
 	public void removeContact(int id) {
 		// Obtenemos la instancia de Contact a eliminar
@@ -66,6 +85,9 @@ public class ContactServiceImpl implements ContactService{
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.miguel.nja.proyectoBackendnja2.services.ContactService#findContactModelById(int)
+	 */
 	@Override
 	public ContactModel findContactModelById(int id) {
 		// TODO Auto-generated method stub
